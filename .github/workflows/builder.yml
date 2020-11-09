@@ -31,6 +31,17 @@ jobs:
           echo ::set-output name=docker_username::patrickjmcd
           echo ::set-output name=docker_image::registry.pmcd.io/ff-nginx
 
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_REACT_APP_ESPN_LEAGUE_ID: "${{ secrets.ESPN_LEAGUE_ID }}"
+          envkey_REACT_APP_ESPN_API_S2: "${{ secrets.ESPN_API_S2 }}"
+          envkey_REACT_APP_ESPN_API_SWID: "${{ secrets.ESPN_API_SWID }}"
+          envkey_REACT_APP_STRAPI_URL: "${{ secrets.STRAPI_URL }}"
+          envkey_REACT_APP_STRAPI_USERNAME: "${{ secrets.STRAPI_USERNAME }}"
+          envkey_REACT_APP_STRAPI_PASSWORD: "${{ secrets.STRAPI_PASSWORD }}"
+          file_name: .env
+
       - name: yarn install the app
         uses: borales/actions-yarn@v2.0.0
         with:
@@ -56,12 +67,6 @@ jobs:
         run: |
           docker buildx build --platform ${{ steps.prepare.outputs.docker_platforms }} \
             --output "type=image,push=false" \
-            --build-arg "ESPN_LEAGUE_ID=${{ secrets.ESPN_LEAGUE_ID }}" \
-            --build-arg "ESPN_API_S2=${{ secrets.ESPN_API_S2 }}" \
-            --build-arg "ESPN_API_SWID=${{ secrets.ESPN_API_SWID }}" \
-            --build-arg "STRAPI_URL=${{ secrets.STRAPI_URL }}" \
-            --build-arg "STRAPI_USERNAME=${{ secrets.STRAPI_USERNAME }}" \
-            --build-arg "STRAPI_PASSWORD=${{ secrets.STRAPI_PASSWORD }}" \
             --build-arg "BUILD_DATE=${{ steps.prepare.outputs.build_date }}" \
             --build-arg "VCS_REF=${GITHUB_SHA::8}" \
             --build-arg "VERSION=${{ steps.prepare.outputs.version }}" \
@@ -81,12 +86,6 @@ jobs:
         run: |
           docker buildx build --platform ${{ steps.prepare.outputs.docker_platforms }} \
             --output "type=image,push=true" \
-            --build-arg "ESPN_LEAGUE_ID=${{ secrets.ESPN_LEAGUE_ID }}" \
-            --build-arg "ESPN_API_S2=${{ secrets.ESPN_API_S2 }}" \
-            --build-arg "ESPN_API_SWID=${{ secrets.ESPN_API_SWID }}" \
-            --build-arg "STRAPI_URL=${{ secrets.STRAPI_URL }}" \
-            --build-arg "STRAPI_USERNAME=${{ secrets.STRAPI_USERNAME }}" \
-            --build-arg "STRAPI_PASSWORD=${{ secrets.STRAPI_PASSWORD }}" \
             --build-arg "BUILD_DATE=${{ steps.prepare.outputs.build_date }}" \
             --build-arg "VCS_REF=${GITHUB_SHA::8}" \
             --build-arg "VERSION=${{ steps.prepare.outputs.version }}" \
