@@ -54,33 +54,34 @@ const analyzeLineup = (lineup, score) => {
 
     const flexPos = { RB: 2, WR: 2, TE: 1, FLEX: 1 };
 
+    const acceptPlayer = (player) => {
+        bestRoster.push(player.player.fullName);
+        bestSum += player.totalPoints;
+        if (player.position === "Bench") {
+            numChanges += 1;
+        }
+    };
+
     while (_.sum(_.values(flexPos)) && !_.isEmpty(sortedFlexPlayers)) {
         const player = sortedFlexPlayers.pop();
-        const acceptPlayer = () => {
-            bestRoster.push(player.player.fullName);
-            bestSum += player.totalPoints;
-            if (player.position === "Bench") {
-                numChanges += 1;
-            }
-        };
 
         if (flexPos.RB && _.includes(player.player.eligiblePositions, "RB")) {
-            acceptPlayer();
+            acceptPlayer(player);
             flexPos.RB -= 1;
         } else if (
             flexPos.WR &&
             _.includes(player.player.eligiblePositions, "WR")
         ) {
-            acceptPlayer();
+            acceptPlayer(player);
             flexPos.WR -= 1;
         } else if (
             flexPos.TE &&
             _.includes(player.player.eligiblePositions, "TE")
         ) {
-            acceptPlayer();
+            acceptPlayer(player);
             flexPos.TE -= 1;
         } else if (flexPos.FLEX) {
-            acceptPlayer();
+            acceptPlayer(player);
             flexPos.FLEX -= 1;
         }
     }
@@ -112,7 +113,7 @@ const getSortedScores = async (leagueId, seasonId, weekId) => {
 
         const allScores = [];
 
-        const boxWithResults = boxscores.map((s) => {
+        boxscores.forEach((s) => {
             const aHome = analyzeLineup(s.homeRoster, s.homeScore);
             const aAway = analyzeLineup(s.awayRoster, s.awayScore);
             const boxHome = {
