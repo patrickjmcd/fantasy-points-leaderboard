@@ -31,6 +31,11 @@ jobs:
           echo ::set-output name=docker_username::patrickjmcd
           echo ::set-output name=docker_image::registry.pmcd.io/ff-nginx
 
+      - name: yarn build the app
+        uses: borales/actions-yarn@v2.0.0
+        with:
+          cmd: build # will run `yarn build` command
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
         with:
