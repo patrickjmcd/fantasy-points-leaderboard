@@ -1,6 +1,5 @@
 import _ from "lodash";
 import espn from "espn-fantasy-football-api/node";
-import cookie from "./cookie";
 
 const filterPosition = (boxscorePlayer, position) => {
     return (
@@ -96,7 +95,7 @@ const analyzeLineup = (lineup, score) => {
 
 const getSortedScores = async (leagueId, seasonId, weekId) => {
     const myClient = new espn.Client({ leagueId });
-    myClient.setCookies(cookie);
+    // myClient.setCookies(cookie);
 
     try {
         const boxscores = await myClient.getBoxscoreForWeek({
@@ -200,7 +199,7 @@ const printAllScores = async (leagueId, seasonId, currentWeek) => {
 
 const getBoxScoresWithBest = async (leagueId, seasonId, weekId) => {
     const myClient = new espn.Client({ leagueId });
-    myClient.setCookies(cookie);
+    // myClient.setCookies(cookie);
 
     try {
         const boxscores = await myClient.getBoxscoreForWeek({

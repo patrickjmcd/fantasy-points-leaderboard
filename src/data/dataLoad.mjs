@@ -1,12 +1,11 @@
 import espn from "espn-fantasy-football-api/node";
 import { optimize } from "./optimize.mjs";
 import { api } from "./api.mjs";
-import cookie from "./cookie.mjs";
 import _ from "lodash";
 
 const leagueId = process.env.REACT_APP_ESPN_LEAGUE_ID;
 const myClient = new espn.Client({ leagueId });
-myClient.setCookies(cookie);
+// myClient.setCookies(cookie);
 
 const getTeamsFromESPN = async (leagueId, seasonId, weekId) => {
     try {
